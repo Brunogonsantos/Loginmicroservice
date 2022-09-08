@@ -1,4 +1,5 @@
 ﻿using domain.domain.model;
+using domain.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,19 +14,21 @@ namespace Login.Controllers
     public class Logincontroller : ControllerBase
     {
 
-
+        private readonly ILoginLogic _locationLogic;
         private readonly ILogger<Logincontroller> _logger;
 
-        public Logincontroller(ILogger<Logincontroller> logger)
+        public Logincontroller(ILogger<Logincontroller> logger, ILoginLogic loginLogic)
         {
             _logger = logger;
+            _locationLogic = loginLogic;
         }
         [HttpPost("user")]
         public IActionResult AddUser([FromBody] UserModel request)
         {
             try
             {
-                return Ok();
+                var result = _locationLogic.AddUser(request);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -39,7 +42,8 @@ namespace Login.Controllers
         {
             try
             {
-                return Ok();
+                var result = _locationLogic.UserLogin (request);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -53,7 +57,8 @@ namespace Login.Controllers
         {
             try
             {
-                return Ok();
+                var result = _locationLogic.UserAlterar(email);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -67,7 +72,8 @@ namespace Login.Controllers
         {
             try
             {
-                return Ok();
+                var result = _locationLogic.UserExcluir(email);
+                return Ok(result);
 
             }
             catch (Exception ex)
